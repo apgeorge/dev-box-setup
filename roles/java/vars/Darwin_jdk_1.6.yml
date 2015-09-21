@@ -1,0 +1,9 @@
+---
+app_name: JavaForOSX
+app_name_pretty: Java
+app_url: "https://support.apple.com/downloads/DL1572/en_US/javaforosx.dmg"
+# https://support.apple.com/downloads/DL1572/en_US/javaforosx.dmg
+mount_path: /Volumes/Java for OS X 2015-001/
+installer_type: pkg
+install_method: dmg
+install_target: "/"

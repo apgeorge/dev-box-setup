@@ -1,0 +1,12 @@
+---
+- name: "Download JAVA for Centos"
+  get_url: url="http://{{ file_server }}/setup/{{ jdk_binary }}" dest={{ downloads }}/{{ jdk_binary }}
+  when: ansible_os_family == "RedHat"
+
+- name: "Make the java bin file an executable"
+  file: path={{ downloads }}/{{ jdk_binary }} mode=755
+  when: ansible_os_family == "RedHat"
+
+- name: "Install JAVA 6 for Centos"
+  shell: "yes | sudo {{ downloads }}/{{ jdk_binary }}"
+  when: ansible_os_family == "RedHat"

@@ -1,0 +1,9 @@
+---
+dependencies:
+  - { role: base }
+  - { role: java, jdk_versions: [1.6,1.7] }
+  - { role: android }
+  - { role: rvm }
+  - { role: nvm }
+
+

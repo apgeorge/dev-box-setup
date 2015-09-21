@@ -1,0 +1,11 @@
+---
+- name: Update the apt-get cache
+  apt: update_cache=yes
+  sudo: yes
+
+- name: Install CURL and ZIP
+  apt: pkg={{ item }} state=present
+  with_items:
+    - curl
+    - zip
+  sudo: yes

@@ -1,0 +1,54 @@
+---
+- name: Install nvm on MacOSX
+  homebrew: name={{ item }} state=present
+  with_items:
+    - nvm
+  when: ansible_os_family == "Darwin"
+
+
+- name: Install nvm on Linux
+  shell: curl https://raw.githubusercontent.com/creationix/nvm/v0.25.0/install.sh | bash creates={{ HOME }}/.nvm
+  sudo: yes
+  sudo_user: '{{ user }}'
+  when: ansible_os_family == "Debian"
+
+- name: Add NVM Home
+  lineinfile:
+   dest={{ HOME }}/{{ shellrc }}
+   state=present
+   create=yes
+   line='export NVM_DIR={{ HOME }}/.nvm'
+  sudo: yes
+  sudo_user: '{{ user }}'
+
+- name: Add NVM to shell profile
+  lineinfile:
+   dest={{ HOME }}/{{ shellrc }}
+   state=present
+   create=yes
+   line='source $(brew --prefix nvm)/nvm.sh'
+  when: ansible_os_family == "Darwin"
+
+- name: Add NVM to bash profile
+  lineinfile:
+   dest={{ HOME }}/.bash_profile
+   state=present
+   create=yes
+   line='source $(brew --prefix nvm)/nvm.sh'
+
+- name: Add NVM to shell profile
+  lineinfile:
+   dest={{ HOME }}/{{ shellrc }}
+   state=present
+   create=yes
+   line='[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"'
+  sudo: yes
+  sudo_user: '{{ user }}'
+  when: ansible_os_family == "Debian"
+
+- name: Install node 0.10.33 via nvm
+  command: bash -lc "nvm install 0.10.33" creates={{ HOME }}/.nvm/v0.10.33
+  sudo: yes
+  sudo_user: '{{ user }}'
+
+

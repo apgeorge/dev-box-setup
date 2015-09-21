@@ -1,0 +1,11 @@
+---
+- { include: "jdk.yml", jdk_version: 1.6, when: (1.6 in jdk_versions) }
+- { include: "jdk.yml", jdk_version: 1.7, when: (1.7 in jdk_versions) }
+
+- name: Set JAVA_HOME to Java 1.7
+  lineinfile:
+    dest={{ HOME }}/{{ shellrc }}
+    state=present
+    create=yes
+    line='export JAVA_HOME=`/usr/libexec/java_home -v 1.7`'
+  when: ansible_os_family == "Darwin"

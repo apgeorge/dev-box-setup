@@ -1,0 +1,11 @@
+---
+- name: Install Xcode
+  include_vars: "main.yml"
+
+- name: Check if Xcode is installed
+  command: xcodebuild -version
+  register: xcode_version
+  ignore_errors: true
+
+- include: ../../common/tasks/dmg.yml
+  when: xcode_version.rc != 0 or xcode_version.stdout.find("Xcode 7.0") == -1

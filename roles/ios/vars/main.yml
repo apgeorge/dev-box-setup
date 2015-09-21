@@ -1,0 +1,8 @@
+---
+app_name: Xcode
+app_name_pretty: Xcode
+app_url: "http://{{ file_server }}/setup/Xcode_7.0.dmg"
+mount_path: /Volumes/Xcode/
+installer_type: app
+install_method: dmg
+install_target: "/"

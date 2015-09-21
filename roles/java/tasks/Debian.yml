@@ -1,0 +1,28 @@
+---
+- name: Check if Java is installed
+  command: dpkg-query -l oracle-{{ java_name }}-installer
+  register: check_java
+  failed_when: False
+
+- name: Add Oracle Java gpg key to apt
+  apt_key: data="{{ lookup('file', 'oracle-gpg.asc') }}" state=present
+  sudo: yes
+  when: check_java.rc != 0
+
+- name: Add Oracle Java Repo to apt
+  apt_repository: repo='ppa:webupd8team/java' state=present
+  sudo: yes
+  when: check_java.rc != 0
+
+- name: Automatically select the Oracle License
+  shell: echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
+  changed_when: false
+  sudo: yes
+  when: check_java.rc != 0
+
+- name: Install Oracle Java
+  apt: pkg={{item}} state=present install_recommends=yes 
+  with_items:
+    - oracle-{{ java_name }}-installer
+    - oracle-{{ java_name }}-set-default
+  sudo: yes

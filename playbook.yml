@@ -1,0 +1,9 @@
+---
+- hosts: all
+  vars:
+    file_server: localhost:8080
+    HOME: "/Users/arojgeorge"
+    shellrc: .zshrc
+
+  roles:
+    - dev-box

@@ -1,0 +1,19 @@
+---
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Install libraries with homebrew
+  homebrew: name={{ item }} state=present
+  with_items:
+      - android-sdk
+  when: ansible_os_family == "Darwin"
+
+- name: Add ANDROID_HOME to shell profile
+  lineinfile:
+    dest={{ HOME }}/{{ shellrc }}
+    state=present
+    create=yes
+    line='export ANDROID_HOME={{ android_home }}'
+
+#- name: Install Android SDK Components
+#  command: 'yes | {{ android_home }}/tools/android update sdk -u --all --filter {{ android_sdk_components | join(",") }}'

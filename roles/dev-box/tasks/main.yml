@@ -1,0 +1,156 @@
+---
+
+- name: Tap common homebrew taps
+  homebrew_tap: tap={{ item }} state=present
+  with_items:
+    - homebrew/services
+    - homebrew/dupes
+    - homebrew/versions
+
+- name: Update Homebrew
+  homebrew: update_homebrew=yes
+
+- name: Install common utils with homebrew
+  homebrew: name={{ item }} state=present
+  with_items:
+    - automake
+    - autojump
+    - autoconf
+    - libevent
+    - libyaml
+    - ack
+    - colordiff
+    - curl
+    - git
+    - git-plus
+    - wget
+    - hub
+    - the_silver_searcher
+    - openssl
+    - readline
+    - tmux
+    - reattach-to-user-namespace
+    - libxml2
+    - zsh
+  when: ansible_os_family == "Darwin"
+
+- name: Install common gnu utils with homebrew
+  homebrew: name={{ item }} state=present install_options=default-names
+  with_items:
+    - coreutils
+    - findutils
+    - gnu-tar 
+    - gnu-sed
+
+- name: Install MacVim with homebrew
+  homebrew: name=macvim state=present install_options=override-system-vim
+  when: ansible_os_family == "Darwin"
+
+- name: Install homebrew cask with homebrew
+  homebrew: name=caskroom/cask/brew-cask state=present
+
+- name: Setup caskroom permissions
+  shell: brew cask list
+  sudo: yes
+  sudo_user: "{{ user }}"
+
+- name: Install apps with homebrew cask
+  homebrew_cask: name={{ item }} state=present
+  with_items:
+    - virtualbox
+    - vagrant
+    - sublime-text
+    - intellij-idea-ce
+    - firefox
+    - caffeine
+    - iterm2
+    - alfred
+    - android-file-transfer
+    - cheatsheet
+    - doubletwist
+    - dropbox
+    - google-hangouts
+    - google-drive
+    - flux
+    - spectacle
+    - superduper
+    - vlc
+    - utorrent
+    - battery-guardian
+    - rescuetime
+    - satellite-eyes
+    - android-studio
+    - squidman
+    - skitch
+    - evernote
+  when: ansible_os_family == "Darwin"
+  sudo: yes
+  sudo_user: "{{ user }}"
+
+- name: Install quick look plugins with homebrew cask
+  homebrew_cask: name={{ item }} state=present
+  with_items:
+    - qlcolorcode
+    - qlstephen
+    - qlmarkdown
+    - quicklook-json
+    - quicklook-csv
+    - betterzipql
+    - webpquicklook
+    - suspicious-package
+    - qlimagesize
+    - provisionql
+  when: ansible_os_family == "Darwin"
+
+- name: Allow text selection in Quick look
+  shell: defaults write com.apple.finder QLEnableTextSelection -bool true && killall Finder
+
+- name: Setup oh-my-zsh
+  shell: curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh
+
+- name: Tap homebrew repo for ctags
+  homebrew_tap: tap=universal-ctags/universal-ctags state=present
+
+- name: Install Ctags with homebrew
+  homebrew: name=universal-ctags state=head
+  when: ansible_os_family == "Darwin"
+
+- name: Install apps with homebrew
+  homebrew: name={{ item }} state=present
+  with_items:
+    - maven32
+    - sonar-runner
+    - gcovr
+    - xctool
+    - imagemagick
+    - nginx
+    - postgres
+    - docker
+    - boot2docker
+    - fasd
+    - packer
+    - sqlite
+    - ssh-copy-id
+    - ios-sim
+    - subversion
+    - kdiff3
+    - pv
+    - htop-osx
+  when: ansible_os_family == "Darwin"
+
+- name: Install programming languages with homebrew
+  homebrew: name={{ item }} state=present
+  with_items:
+    - scala
+    - sbt
+    - leiningen
+    - elixir
+  when: ansible_os_family == "Darwin"
+
+
+- name: Setup ulimits
+  lineinfile:
+    dest={{ HOME }}/{{ shellrc }}
+    state=present
+    create=yes
+    line='ulimit -n 1024'

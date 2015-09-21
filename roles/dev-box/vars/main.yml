@@ -1,0 +1,7 @@
+---
+#file_server: 10.12.20.55:8080
+ruby: ruby-2.1.1
+downloads: /tmp
+jdk_versions:
+  - 1.6
+  - 1.7

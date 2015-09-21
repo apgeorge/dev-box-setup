@@ -1,0 +1,2 @@
+---
+- include: ../../common/tasks/dmg.yml

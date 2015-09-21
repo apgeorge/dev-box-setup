@@ -1,0 +1,23 @@
+---
+- include_vars: "{{ ansible_os_family }}_jdk_{{ jdk_version }}.yml"
+
+- name: Check if JDK {{ jdk_version }} is installed
+  command: /usr/libexec/java_home -v {{ jdk_version }}
+  register: java_version_check
+  ignore_errors: true
+  when: ansible_os_family == "Darwin"
+
+- name: Check if JDK {{ jdk_version }} is installed
+  command: java -version
+  register: java_version
+  ignore_errors: true
+  when: ansible_os_family == "Debian"
+
+- include: "Debian.yml"
+  when: ansible_os_family == "Debian" and  (java_version.rc != 0 or java_version.stderr.find('1.7') != 0)
+
+- include: "Darwin.yml"
+  when: ansible_os_family == "Darwin" and java_version_check.rc != 0
+
+- include: "RedHat.yml"
+  when: ansible_os_family == "RedHat" and java_version_check.rc != 0

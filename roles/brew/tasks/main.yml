@@ -1,0 +1,10 @@
+---
+- name: Own the /usr/local folder
+  command: chown -R {{ ansible_user_id }}:staff /usr/local creates="/usr/local/bin/brew"
+  sudo: yes
+
+- name: Install homebrew
+  shell: ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" </dev/null creates="/usr/local/bin/brew"
+
+# - name: Update Homebrew
+#   homebrew: update_homebrew=yes
