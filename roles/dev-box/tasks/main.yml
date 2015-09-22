@@ -34,13 +34,39 @@
     - zsh
   when: ansible_os_family == "Darwin"
 
-- name: Install common gnu utils with homebrew
+- name: Install coreutils with homebrew
   homebrew: name={{ item }} state=present install_options=default-names
   with_items:
     - coreutils
+
+- name: Install common gnu utils with homebrew
+  homebrew: name={{ item }} state=present
+  with_items:
+    - binutils
+    - diffutils 
+
+- name: Install common gnu utils with default-names
+  homebrew: name={{ item }} state=present install_options=with-default-names
+  with_items:
     - findutils
     - gnu-tar 
     - gnu-sed
+    - gnu-which
+    - grep
+
+- name: Setup path to the GNU utils in shell rc
+  lineinfile:
+    dest={{ HOME }}/{{ shellrc }}
+    state=present
+    create=yes
+    line='export PATH="$(brew --prefix coreutils)/libexec/gnubin::$PATH"'
+
+- name: Setup path to the GNU utils in bash profile
+  lineinfile:
+    dest={{ HOME }}/.bash_profile
+    state=present
+    create=yes
+    line='export PATH="$(brew --prefix coreutils)/libexec/gnubin::$PATH"'
 
 - name: Install MacVim with homebrew
   homebrew: name=macvim state=present install_options=override-system-vim
