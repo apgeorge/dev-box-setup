@@ -162,7 +162,15 @@
     - kdiff3
     - pv
     - htop-osx
+    - zsh-syntax-highlighting
   when: ansible_os_family == "Darwin"
+
+- name: Source zsh-syntax-highlighting
+  lineinfile:
+    dest={{ HOME }}/{{ shellrc }}
+    state=present
+    create=yes
+    line='source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh'
 
 - name: Install programming languages with homebrew
   homebrew: name={{ item }} state=present
@@ -173,10 +181,11 @@
     - elixir
   when: ansible_os_family == "Darwin"
 
-
 - name: Setup ulimits
   lineinfile:
     dest={{ HOME }}/{{ shellrc }}
     state=present
     create=yes
     line='ulimit -n 1024'
+
+# TODO: install powerline fonts from https://github.com/powerline/fonts
