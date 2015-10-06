@@ -151,6 +151,7 @@
     - imagemagick
     - nginx
     - postgres
+    - mysql
     - docker
     - boot2docker
     - fasd
