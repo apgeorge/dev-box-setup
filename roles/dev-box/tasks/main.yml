@@ -84,6 +84,7 @@
   homebrew_cask: name={{ item }} state=present
   with_items:
     - virtualbox
+    - java
     - vagrant
     - sublime-text
     - intellij-idea-ce
@@ -164,6 +165,7 @@
     - pv
     - htop-osx
     - zsh-syntax-highlighting
+    - tomcat
   when: ansible_os_family == "Darwin"
 
 - name: Source zsh-syntax-highlighting
